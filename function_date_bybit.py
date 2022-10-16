@@ -34,13 +34,9 @@ def get_price(sub_url):
     return search_price.text
 
 
-for sub_url in sub_urls:
-    price = get_price(sub_url)
-    all_date.append(price)
-
-
-
-print(all_date)
-
-sleep(5)
-driver.close()
+if __name__=='__main__':
+    for sub_url in sub_urls:
+        price = get_price(sub_url)
+        all_date.append(price)
+    print(all_date)
+    driver.close()
