@@ -9,8 +9,8 @@ from time import sleep
 from tqdm import tqdm
 
 
-all_date = []
-sub_urls = [
+
+SUB_URLS = [
     "1&token=USDT&fiat=RUB&paymentMethod=75",
     "0&token=USDT&fiat=RUB&paymentMethod=75",
     "1&token=USDT&fiat=RUB&paymentMethod=185",
@@ -24,10 +24,10 @@ sub_urls = [
     "1&token=BTC&fiat=RUB&paymentMethod=64",
     "0&token=BTC&fiat=RUB&paymentMethod=64",
 ]
-driver = Chrome()
 
 
-def get_price(sub_url):
+
+def get_price(driver, sub_url):
     driver.get(f"https://www.bybit.com/fiat/trade/otc/?actionType={sub_url}")
     sleep(3)
     search_price = driver.find_element(By.CSS_SELECTOR, 'div.trade-table__wrapper span.price-amount')
@@ -35,8 +35,10 @@ def get_price(sub_url):
 
 
 if __name__=='__main__':
-    for sub_url in sub_urls:
-        price = get_price(sub_url)
+    all_date = []
+    driver = Chrome()
+    for sub_url in SUB_URLS:
+        price = get_price(driver, sub_url)
         all_date.append(price)
     print(all_date)
     driver.close()
