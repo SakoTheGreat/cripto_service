@@ -9,10 +9,6 @@ from time import sleep
 from tqdm import tqdm
 
 
-all_prices = []
-driver = Chrome()
-delay_time = 8
-
 
 sub_urls = [
     'sell/USDT?fiat=RUB&payment=TinkoffNew',
@@ -32,7 +28,7 @@ sub_urls = [
 
 def get_price(sub_url):
     driver.get(f"https://p2p.binance.com/ru/trade/{sub_url}")
-    sleep(delay_time)
+    sleep(8)
     search_price = driver.find_element(By.CSS_SELECTOR, '[class="css-1m1f8hn"]')
     return search_price.text
 
