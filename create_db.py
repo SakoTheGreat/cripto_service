@@ -1,3 +1,3 @@
-from model import db, bit_currency
+from webapp import db, create_app
 
-db.create_all(app=bit_currency())
+db.create_all(app=create_app())
