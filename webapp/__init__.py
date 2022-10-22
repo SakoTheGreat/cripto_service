@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from model import db
+from webapp.model import db
 
 
 
