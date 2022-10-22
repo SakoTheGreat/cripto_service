@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from webapp.model import db
+from model import db
 
 
 
@@ -9,8 +9,6 @@ def create_app():
     app.config.from_pyfile("config.py")
     db.init_app(app)
 
-    #with app.app_context():
-        #db.create_all()
 
     @app.route('/')
     def index():
