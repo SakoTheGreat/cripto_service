@@ -2,42 +2,50 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from time import sleep
 
+from webapp.model import db, BitCurrency
 
-
-SUB_URLS = {
-    ('Buy', 'USDT', 'RUB', 'Tinkoff', 'Bybit'): "1&token=USDT&fiat=RUB&paymentMethod=75",
-    ('Sell', 'USDT', 'RUB', 'Tinkoff', 'Bybit'): "0&token=USDT&fiat=RUB&paymentMethod=75",
-    ('Buy', 'USDT', 'RUB', 'RosBank', 'Bybit'): "1&token=USDT&fiat=RUB&paymentMethod=185",
-    ('Sell', 'USDT', 'RUB', 'RosBank', 'Bybit'): "0&token=USDT&fiat=RUB&paymentMethod=185",
-    ('Buy', 'USDT', 'RUB', 'RaiffeisenBank', 'Bybit'): "1&token=USDT&fiat=RUB&paymentMethod=64",
-    ('Sell', 'USDT', 'RUB', 'RaiffeisenBank', 'Bybit'): "0&token=USDT&fiat=RUB&paymentMethod=64",
-    ('Buy', 'BTC', 'RUB', 'Tinkoff', 'Bybit'): "1&token=BTC&fiat=RUB&paymentMethod=75",
-    ('Sell', 'BTC', 'RUB', 'Tinkoff', 'Bybit'): "0&token=BTC&fiat=RUB&paymentMethod=75",
-    ('Buy', 'BTC', 'RUB', 'RosBank', 'Bybit'): "1&token=BTC&fiat=RUB&paymentMethod=185",
-    ('Sell', 'BTC', 'RUB', 'RosBank', 'Bybit'): "0&token=BTC&fiat=RUB&paymentMethod=185",
-    ('Buy', 'BTC', 'RUB', 'RaiffeisenBank', 'Bybit'): "1&token=BTC&fiat=RUB&paymentMethod=64",
-    ('Sell', 'BTC', 'RUB', 'RaiffeisenBank', 'Bybit'): "0&token=BTC&fiat=RUB&paymentMethod=64",
+action_types = {
+    'Buy': '1',
+    'Sell': '0',
 }
+
+tokens = ['USDT', 'BTC']
+payment_methods = {
+    'Tinkoff': '75',
+    'RosBank': '185',
+    'RaiffeisenBank': '64',
+}
+
+SUB_URLS_PROGRAMMATICAL = {}
+for token in tokens:
+    for bank, bank_id in payment_methods.items():
+        for action, action_id in action_types.items():
+            key = (action, token, 'RUB', bank, 'Bybit')
+            SUB_URLS_PROGRAMMATICAL[key] = f"actionType={action_id}&token={token}&fiat=RUB&paymentMethod={bank_id}"
 
 
 
 def get_price(sub_url):
-    driver.get(f"https://www.bybit.com/fiat/trade/otc/?actionType={sub_url}")
-    sleep(3)
+    driver = Chrome()
+    driver.get(f"https://www.bybit.com/fiat/trade/otc/?{sub_url}")
+    sleep(6)
     search_price = driver.find_element(By.CSS_SELECTOR, 'div.trade-table__wrapper span.price-amount')
+    driver.close()
     return search_price.text
 
 
-if __name__=='__main__':
-    all_prices_lol = []
-    driver = Chrome()
-    for key, sub_url in SUB_URLS.items():
+def save_binance(all_prices):
+    for price_info in all_prices:
+        bin_bin = BitCurrency(sell_purchase=price_info[1], currency=price_info[2], bank=price_info[3], site=price_info[4], price=price_info[0])
+        db.session.add(bin_bin)
+        db.session.commit()
+
+def db_bybit():
+    for key, sub_url in SUB_URLS_PROGRAMMATICAL.items():
         all_prices = []
         price = get_price(sub_url)
         all_prices.append(price)
         for i in key:
             all_prices.append(i)
-        all_prices_lol.append(all_prices)
         
-    print(all_prices_lol)
-    driver.close()
+        save_binance(all_prices)
