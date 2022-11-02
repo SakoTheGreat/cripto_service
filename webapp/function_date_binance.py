@@ -45,12 +45,22 @@ def save_binance(all_prices):
         db.session.commit()
 
 
-def db_binance():
-    for key, sub_url in SUB_URLS_PROGRAMIMIMI.items():
-        all_prices = []
-        price = get_price(sub_url)
-        all_prices.append(price)
-        for i in key:
-            all_prices.append(i)
-        
-        save_binance(all_prices)
+def proba_pera():
+    all_prices = []
+    for token in tokens:
+        for bank, bank_id in payment_methods.items():
+            for action, action_id in action_types.items():
+                price_info = []
+                key = (action, token, 'RUB', bank, 'Binance')
+                for i in key:
+                    price_info.append(i)
+                if action == 'Sell':
+                    price = get_price(f"{action_id}/{token}?fiat=RUB&payment={bank_id}")
+                    price_info.append(price)
+                elif action == 'Buy':
+                    price = get_price(f"{bank_id}/{token}?fiat=RUB")
+                    price_info.append(price)
+            
+                all_prices.append(price_info)
+            
+    save_binance(all_prices)
