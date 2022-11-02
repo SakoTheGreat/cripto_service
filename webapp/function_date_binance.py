@@ -17,19 +17,6 @@ payment_methods = {
     'RaiffeisenBank': 'RaiffeisenBank',
 }
 
-SUB_URLS_PROGRAMIMIMI = {}
-
-for token in tokens:
-    for bank, bank_id in payment_methods.items():
-        for action, action_id in action_types.items():
-            key = (action, token, 'RUB', bank, 'Binance')
-            if action == 'Sell':
-                SUB_URLS_PROGRAMIMIMI[key] = f"{action_id}/{token}?fiat=RUB&payment={bank_id}"
-            elif action == 'Buy':
-                SUB_URLS_PROGRAMIMIMI[key] = f"{bank_id}/{token}?fiat=RUB"
-
-
-
 def get_price(sub_url):
     driver = Chrome()
     driver.get(f"https://p2p.binance.com/ru/trade/{sub_url}")
