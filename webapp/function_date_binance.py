@@ -21,7 +21,7 @@ def save_binance(all_prices):
         db.session.commit()
 
 
-def proba_pera():
+def fill_binance_data_table():
     action_types ={
     'Sell': 'sell',
     'Buy': '',
