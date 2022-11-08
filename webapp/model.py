@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-class bit_currency(db.Model):
+class BitCurrency(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     currency = db.Column(db.String, nullable=False)
     price = db.Column(db.Float, nullable=False)
