@@ -1,3 +1,4 @@
-selenium
-bs4
-tqdm
+Flask==2.2.2
+Flask-SQLAlchemy==3.0.2
+selenium==4.5.0
+SQLAlchemy==1.4.42
