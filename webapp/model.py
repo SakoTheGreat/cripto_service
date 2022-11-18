@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class BitCurrency(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     currency = db.Column(db.String, nullable=False)
-    price = db.Column(db.Float, nullable=False)
+    price = db.Column(db.String, nullable=False)
     bank = db.Column(db.String, nullable=False)
     sell_purchase = db.Column(db.String, nullable=False)
     site = db.Column(db.String, nullable=False)

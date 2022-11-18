@@ -2,7 +2,6 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
-
 from webapp.model import db, BitCurrency
 
 
@@ -55,7 +54,6 @@ def fill_bybit_data_table():
                 
                 all_prices.append(price_info)    
 
-    print(all_prices)
+    save_binance(all_prices)
 
 
-fill_bybit_data_table()
